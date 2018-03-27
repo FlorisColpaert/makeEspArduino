@@ -22,7 +22,7 @@
 
 #=== Default values not available in the Arduino configuration files
 
-CHIP ?= esp8266
+CHIP ?= esp32
 
 # Set chip specific default board unless specified
 BOARD ?= $(if $(filter $(CHIP), esp32),esp32,generic)
@@ -362,6 +362,7 @@ help:
 	echo "  BUILD_DIR            Directory for intermediate build files."
 	echo "                         Default '$(BUILD_DIR)'"
 	echo "  BUILD_EXTRA_FLAGS    Additional parameters for the compilation commands"
+	echo "  COMPILER_EXTRA_FLAGS Additional parameters for the compilation commands"
 	echo "  FS_DIR               File system root directory"
 	echo "  UPLOAD_PORT          Serial flashing port name. Default: '$(UPLOAD_PORT)'"
 	echo "  UPLOAD_SPEED         Serial flashing baud rate. Default: '$(UPLOAD_SPEED)'"
@@ -461,6 +462,9 @@ $$v{'recipe.objcopy.hex.pattern'} =~ s/[^"]+\/bootloaders\/eboot\/eboot.elf/\$$(
 $$v{'tools.esptool.upload.pattern'} =~ s/\{(cmd|path)\}/\{tools.esptool.$$1\}/g;
 $$v{'compiler.cpreprocessor.flags'} .= " \$$(C_PRE_PROC_FLAGS)";
 $$v{'build.extra_flags'} .= " \$$(BUILD_EXTRA_FLAGS)";
+$$v{'compiler.c.extra_flags'} .= " \$$(COMPILER_EXTRA_FLAGS)";
+$$v{'compiler.cpp.extra_flags'} .= " \$$(COMPILER_EXTRA_FLAGS)";
+
 
 foreach my $$key (sort keys %v) {
    while ($$v{$$key} =~/\{/) {
